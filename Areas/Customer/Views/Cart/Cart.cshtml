@@ -1,0 +1,114 @@
+﻿@using Dashboard.Data;
+
+@inject ApplicationDbContext _c;
+@{
+    List<Image> image = _c.Images.ToList();
+    Layout = "_CustomerLayout";
+}
+
+@model List<Cart>
+<style>
+    .table-container {
+        position: relative;
+    }
+
+    tfoot {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: -100px; /* Adjust this value to control the spacing between table and footer */
+    }
+</style>
+
+@if (Model != null)
+{
+    <h2>Your Cart</h2>
+
+    @if (Model.Count == 0)
+    {
+        <p>Your cart is empty.</p>
+    }
+    else
+    {
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Image</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var cartItem in Model)
+                    {
+                        <tr>
+                            <td>@cartItem.Product.Name</td>
+                            <td>
+                                @if (cartItem.Product.Images.Any())
+                                {
+                                    <img src="@cartItem.Product.Images.First().FileName" alt="Product Image" width="50" />
+                                }
+                                else
+                                {
+                                    <span>No Image</span>
+                                }
+                            </td>
+                            <td>
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <form asp-controller="Cart" title="Increase" asp-action="Increase" method="post" style="display: inline-block; margin-right: 10px;">
+                                        <input type="hidden" name="cartItemId" value="@cartItem.Id" />
+                                        <button class="nav-link btn btn-link  border-0" type="submit"><i class="bi bi-plus-circle text-primary" style=" font-size: 1.5rem;"></i></button>
+                                    </form>
+
+                                    <span style="display: inline-block;font-size: 1.5rem; margin-right: 10px;">@cartItem.Quantity</span>
+
+                                    <form asp-controller="Cart" asp-action="Decrease" title="Decrease" method="post" style="display: inline-block; margin-right: 0px;">
+                                        <input type="hidden" name="cartItemId" value="@cartItem.Id" />
+                                        <button class="nav-link btn btn-link  border-0" type="submit"><i class="bi bi-dash-circle text-danger" style=" font-size: 1.5rem;"></i> </button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <span>@cartItem.Quantity</span>
+                                }
+                            </td>
+                            <td>@cartItem.Product.Price</td>
+                            <td>@cartItem.Total</td>
+                            <td>
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <form asp-action="DeleteCartItem" title="Delete" method="post" class="delete-form" style="margin-right: 8px;">
+                                        <input type="hidden" name="cartItemId" value="@cartItem.Id" />
+                                        <button type="submit" class="btn btn-danger delete-button" style="padding: 2px 4px; font-size: 10px;">
+                                            <i class="bi bi-trash" style="font-size: 12px;"></i>
+                                        </button>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td style="font-size: 1.2rem;">SubTotal: <b class="text-danger">$@Model.Sum(t => t.Total)</b></td>
+                        <td>
+                            <a asp-action="Buy" title="Edit" asp-method="get" asp-controller="Cart" style="margin-right: 8px;">
+                                | <i class="bi bi-pencil" style="font-size: 16px;">Buy</i>
+                            </a>
+                        </td>
+                    </tr>
+                        
+                </tfoot>
+            </table>
+        </div>
+    }
+}
+else
+{
+    <p>No cart data available.</p>
+}

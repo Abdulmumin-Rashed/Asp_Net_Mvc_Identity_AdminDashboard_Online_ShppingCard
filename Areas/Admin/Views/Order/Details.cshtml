@@ -1,0 +1,93 @@
+﻿@{
+    Layout = "_AdminDashboard";
+}
+
+@model Order
+
+<style>
+
+
+    .image-container {
+        display: flex; /* Use flexbox to make images appear in a row */
+        align-items: center; /* Align images vertically within the container */
+    }
+
+    .circle-image {
+        margin-right: 6px; /* Optional: Add some spacing between images */
+    }
+
+    .circle-image-img {
+        width: 50px; /* Set an appropriate width for your images */
+        height: 50px; /* Set an appropriate height for your images */
+        border-radius: 50%; /* To make the images circular */
+    }
+
+</style>
+
+
+
+
+<div class="page-content">
+
+    
+
+    <div class="row">
+        <div class="col-md-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">
+                       
+                            <a  class="btn btn-inverse-info">Order Details</a>
+
+                        
+                    </h6>
+                    <div class="table-responsive">
+                        <table id="dataTableExample" class="table">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Image</th>
+                                    <th>Quantity</th>
+                                    <th>Price Per Item</th>
+                                    <th>Total</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var orderDetail in Model.OrderDetails)
+                                {
+                                    <tr>
+                                        <td>@orderDetail.Product.Name</td>
+                                        <td>
+                                            @if (orderDetail.Product.Images.Any())
+                                            {
+                                                <img src="@orderDetail.Product.Images.First().FileName" alt="Product Image" width="50" />
+                                            }
+                                            else
+                                            {
+                                                <span>No Image</span>
+                                            }
+                                        </td>
+                                        <td>@orderDetail.Quantity</td>
+                                        <td>@orderDetail.PricePerItem.ToString("C")</td>
+                                        <td>@(orderDetail.Quantity * orderDetail.PricePerItem)</td>
+                                        <td>
+                                            <a asp-controller="Order" title="Delete" asp-action="Delete" asp-route-id="@orderDetail.Id" title="Details" style="margin-right: 8px;">
+                                                <i class="bi bi-trash" style="font-size: 16px;"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+
+                                <!-- More table rows can be added here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+

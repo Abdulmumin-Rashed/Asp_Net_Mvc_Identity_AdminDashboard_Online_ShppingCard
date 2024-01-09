@@ -1,0 +1,74 @@
+﻿@model List<Order>
+@{
+    Layout = "_AdminDashboard";
+}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.16.0/font/bootstrap-icons.css" rel="stylesheet">
+<style>
+    .hidden-button {
+        display: none;
+    }
+</style>
+<div class="page-content">
+
+    <nav class="page-breadcrumb">
+        <ol class="breadcrumb">
+            <a asp-action="Create" class="btn btn-inverse-info">Add Category</a>
+
+        </ol>
+    </nav>
+    @if (Model != null && Model.Count > 0)
+    {
+        <div class="row">
+            <div class="col-md-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title">Permissions All</h6>
+                        <div class="table-responsive">
+                            <table id="dataTableExample" class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>User</th>
+                                        <th>Order Date</th>
+                                        <th>Total Amount</th>
+                                        <th>Payment Method</th>
+                                        <th>Billing Address</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var order in Model)
+                                    {
+                                        <tr>
+                                            <td>@order.Id</td>
+                                            <td>@order.AppUser.UserName</td>
+                                            <td>@order.OrderDate.ToShortDateString()</td>
+                                            <td>@order.TotalAmount.ToString("C")</td>
+                                            <td>@order.PaymentMethod</td>
+                                            <td>@order.BillingAddress</td>
+                                            <td>
+                                                <a asp-controller="Order" asp-action="Details" asp-route-id="@order.Id" title="Details" style="margin-right: 8px;">
+                                                    <i class="bi bi-info-circle" style="font-size: 16px;"></i>
+                                                </a>
+
+                                            </td>
+                                        </tr>
+                                    }
+                                    <!-- More table rows can be added here -->
+                            </tbody>
+                        </table>
+                        
+                    
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>}
+    else
+    {
+        <p>No orders available.</p>
+    }
+</div>
+
+

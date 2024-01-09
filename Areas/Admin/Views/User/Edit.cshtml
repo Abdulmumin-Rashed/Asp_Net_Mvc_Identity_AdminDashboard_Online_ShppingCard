@@ -1,0 +1,46 @@
+﻿@using Dashboard.Areas.Admin.ViewModels;
+@model EditUserViewModel
+
+@{
+    Layout = "_AdminDashboard";
+}
+
+<div class="col-md-12 d-flex justify-content-center mt-6">
+    <!-- Center the content horizontally -->
+    <div class="card card-body">
+        <h6 class="card-title">Form Grid</h6>
+        <form asp-action="Edit" method="post">
+            @Html.HiddenFor(h => @Model.User.Id)
+            ;
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="mb-3">
+                        <label asp-for="@Model.User.FirstName" class="form-label">First Name</label>
+                        <input asp-for="@Model.User.FirstName" type="text" class="form-control" >
+                    </div>
+                </div><!-- Col -->
+                <div class="col-sm-3">
+                    <div class="mb-3">
+                        <label asp-for="@Model.User.LastName" class="form-label">Last Name</label>
+                        <input asp-for="@Model.User.LastName" type="text" class="form-control" >
+                    </div>
+                </div><!-- Col -->
+            </div><!-- Row -->
+            <h4 class="mb-3">Roles</h4>
+            <div class="mb-4">
+                @for (int i = 0; i < @Model.Roles.Count(); i++)
+                {
+                    <div class="form-check">
+                        @Html.CheckBoxFor(c => @Model.Roles[i].Selected)
+                        @Html.HiddenFor(h => @Model.Roles[i].Value)
+
+                        @Html.LabelFor(l => @Model.Roles[i].Selected, @Model.Roles[i].Text, new { @class = "form-check-label" })
+                        @Html.HiddenFor(h => @Model.Roles[i].Text)
+                    </div>
+                }
+            </div>
+            <button class="w-100 btn btn-primary btn-lg" type="submit">Save</button>
+        </form>
+       
+    </div>
+</div>

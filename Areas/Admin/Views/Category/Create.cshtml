@@ -1,0 +1,44 @@
+﻿@model Dashboard.Models.Category
+
+@{
+    Layout = "_AdminDashboard";
+}
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Category</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+</head>
+
+<div class="page-content">
+    <div class="row profile-body">
+        <div class="col-md-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Add Category</h6>
+                    <form asp-action="Create" method="post" class="forms-sample">
+                        <div class="mb-3">
+                            <label asp-for="Name" class="form-label">Category Name</label>
+                            <input asp-for="Name" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        
+                        
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="status">Status</label>
+                                <select asp-for="Status" class="form-control">
+                                    <option value="True" selected>Active</option>
+                                    <option value="False">Block</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary me-2">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

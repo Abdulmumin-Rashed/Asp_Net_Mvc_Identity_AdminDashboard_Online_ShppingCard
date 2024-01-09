@@ -1,0 +1,397 @@
+﻿@model Product
+@{
+    Layout = "_AdminDashboard";
+}
+
+<style>
+    .thumbnail-container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+    }
+
+    .thumbnail-box {
+        width: 50px;
+        height: 50px;
+        border: 1px solid #ccc;
+        cursor: pointer;
+    }
+
+        .thumbnail-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    .details-container {
+        margin-top: 100px;
+    }
+
+    /* Add custom CSS for positioning the card */
+    .carousel-and-card-container {
+        display: flex;
+        gap: 20px;
+    }
+</style>
+
+<script>
+
+    function goBack() {
+        window.history.back();
+    }
+    // JavaScript to handle thumbnail hover and update carousel active slide
+    document.addEventListener("DOMContentLoaded", function () {
+        const thumbnails = document.querySelectorAll(".thumbnail-box");
+        const carousel = new bootstrap.Carousel(document.getElementById("carouselExampleControls"));
+
+        thumbnails.forEach((thumbnail, index) => {
+            thumbnail.addEventListener("mouseenter", () => {
+                carousel.to(index); // Activate corresponding slide
+            });
+        });
+    });
+</script>
+<div class="page-content">
+
+<div class="text-center mt-4">
+    <h2> <span style="font-weight: bold; color: rgb(230, 170, 153);">Product Details:</span></h2>
+</div>
+    <br />
+    <br />
+<div class="row">
+    <div class="col-md-1">
+        <div class="thumbnail-container">
+            @foreach (var image in Model.Images)
+            {
+                <div class="thumbnail-box">
+                    <img src="@image.FileName" alt="Thumbnail">
+                </div>
+            }
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                @foreach (var image in Model.Images)
+                {
+                    <div class="carousel-item @(image == Model.Images.First() ? "active" : "")">
+                        <img src="@image.FileName" class="d-block w-100" alt="Product Image">
+                    </div>
+                }
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </a>
+        </div>
+    </div>
+    <div class="col-md-7">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <span style="font-weight: 800; color: rgb(230, 170, 153);">Name: </span>
+                    <strong style="font-weight: bold; color: rgb(14, 13, 46);">@Model.Name</strong>
+                </h5>
+                    <br />
+                <p class="card-text">
+                    <span style="font-weight: bold; color: rgb(230, 170, 153);">Description:</span>
+                    <span style="font-weight: 600; color: rgb(14, 13, 46);">@Model.Description</span>
+                </p>
+                    <br />
+                <p class="card-text">
+                    <span style="font-weight: 800; color: rgb(230, 170, 153);">Price: </span>
+                    <span style="font-weight: bold; color: rgb(14, 13, 46);">$@Model.Price</span>
+                </p>
+                    <br />
+                <p class="card-text">
+                    <span style="font-weight: 800; color: rgb(230, 170, 153);">Category: </span>
+                    <span style="font-weight: bold; color: rgb(14, 13, 46);">@Model.Category.Name</span>
+                </p>
+                <br/>
+                    <p class="card-text">
+                        <span style="font-weight: 800; color: rgb(230, 170, 153);">Created  Date: </span>
+                        <span style="font-weight: bold; color: rgb(14, 13, 46);">@Model.CreateAt.ToShortDateString()</span>
+                    </p>
+            </div>
+            <a href="#" class="btn btn-primary" onclick="goBack()">Go Back</a>
+        </div>
+
+    </div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*
+@model Product
+@{
+    Layout = "_CustomerLayout";
+}
+
+<style>
+    .thumbnail-container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .thumbnail-box {
+        width: 50px;
+        height: 50px;
+        border: 1px solid #ccc;
+        cursor: pointer;
+    }
+
+        .thumbnail-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    .details-container {
+        margin-top: 20px;
+    }
+
+    /* Add custom CSS for positioning the card */
+    .carousel-and-card-container {
+        display: flex;
+        gap: 20px;
+    }
+</style>
+
+<script>
+    // JavaScript to handle thumbnail click and update carousel active slide
+    document.addEventListener("DOMContentLoaded", function () {
+        const thumbnails = document.querySelectorAll(".thumbnail-box");
+        const carousel = new bootstrap.Carousel(document.getElementById("carouselExampleControls"));
+
+        thumbnails.forEach((thumbnail, index) => {
+            thumbnail.addEventListener("click", () => {
+                carousel.to(index); // Activate corresponding slide
+            });
+        });
+    });
+</script>
+
+<div class="text-center mt-4">
+    <h2>Product Details</h2>
+</div>
+
+<div class="row">
+    <div class="col-md-1">
+        <div class="thumbnail-container">
+            @foreach (var image in Model.Images)
+            {
+                <div class="thumbnail-box">
+                    <img src="@image.FileName" alt="Thumbnail">
+                </div>
+            }
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                @foreach (var image in Model.Images)
+                {
+                    <div class="carousel-item @(image == Model.Images.First() ? "active" : "")">
+                        <img src="@image.FileName" class="d-block w-100" alt="Product Image">
+                    </div>
+                }
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </a>
+        </div>
+    </div>
+
+</div>
+ *@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*
+
+
+@model Product
+@{
+    Layout = "_CustomerLayout";
+}
+
+<style>
+    .thumbnail-container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .thumbnail-box {
+        width: 50px;
+        height: 50px;
+        border: 1px solid #ccc;
+        cursor: pointer;
+    }
+
+        .thumbnail-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    .details-container {
+        margin-top: 20px;
+    }
+
+    /* Add custom CSS for positioning the card */
+    .carousel-and-card-container {
+        display: flex;
+        gap: 20px;
+    }
+</style>
+
+<div class="text-center mt-4">
+    <h2> <span style="font-weight: bold; color: rgb(230, 170, 153);">Product Details:</span></h2>
+</div>
+
+<div class="row">
+    <div class="col-md-1">
+        <div class="thumbnail-container">
+            @foreach (var image in Model.Images)
+            {
+                <div class="thumbnail-box" data-bs-target="#carouselExampleControls" data-bs-slide-to="@Model.Images.ToList().IndexOf(image)">
+                    <img src="@image.FileName" alt="Thumbnail">
+                </div>
+            }
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                @foreach (var image in Model.Images)
+                {
+                    <div class="carousel-item @(image == Model.Images.First() ? "active" : "")">
+                        <img src="@image.FileName" class="d-block w-100" alt="Product Image">
+                    </div>
+                }
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </a>
+        </div>
+    </div>
+    <div class="col-md-7">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <span style="font-weight: 800; color: rgb(230, 170, 153);">Name: </span>
+                    <strong style="font-weight: bold; color: rgb(14, 13, 46);">@Model.Name</strong>
+                </h5>
+                <p class="card-text">
+                    <span style="font-weight: bold; color: rgb(230, 170, 153);">Description:</span>
+                    <span style="font-weight: 600; color: rgb(14, 13, 46);">@Model.Description</span>
+                </p>
+                <p class="card-text">
+                    <span style="font-weight: 800; color: rgb(230, 170, 153);">Price: </span>
+                    <span style="font-weight: bold; color: rgb(14, 13, 46);">$@Model.Price</span>
+                </p>
+                <p class="card-text">
+                    <span style="font-weight: 800; color: rgb(230, 170, 153);">Category: </span>
+                    <span style="font-weight: bold; color: rgb(14, 13, 46);">@Model.Category.Name</span>
+                </p>
+                <a href="#" class="btn btn-primary">Buy Now</a>
+            </div>
+        </div>
+    </div>
+</div>
+ *@

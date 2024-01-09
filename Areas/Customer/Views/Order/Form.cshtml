@@ -1,0 +1,52 @@
+﻿@model Order
+@{
+    Layout = "_CustomerLayout";
+}
+<style>
+
+    .payment-form {
+        float: left; /* Align the form to the left side */
+        width: 35%; /* Make the form smaller */
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-top: 30px;
+    }
+
+    /* Styles for the payment options list */
+    .payment-options {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    /* Style for the submit button */
+    .submit-button {
+        background-color: #007BFF;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        cursor: pointer;
+    }
+
+</style>
+
+
+<div class="payment-form">
+    <h3>Payment Information</h3>
+    <form>
+        <div class="form-group">
+            <label for="address">Address:</label>
+            <input asp-for="BillingAddress" type="text" id="address" name="address" class="form-control" placeholder="Enter your address" required>
+        </div>
+        <div class="form-group">
+            <label for="payment-method">Payment Method:</label>
+            <select asp-for="PaymentMethod" id="payment-method" name="payment-method" class="form-control">
+                <option value="Paypal">Paypal</option>
+                <option value="CreditCard">Credit Card</option>
+                <option value="OnDelivery">On Delivery</option>
+            </select>
+        </div>
+        <button type="submit" class="submit-button">Submit</button>
+    </form>
+</div>

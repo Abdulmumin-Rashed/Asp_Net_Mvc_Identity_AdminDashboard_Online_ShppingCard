@@ -1,0 +1,108 @@
+﻿@model List<Cart>
+
+@{
+    Layout = "_CustomerLayout"; // Use the appropriate layout
+    ViewData["Title"] = "Buy";
+}
+
+
+
+
+
+
+
+
+
+
+
+<h2>Confirm Your Order</h2>
+
+<form asp-controller="Order" asp-action="SubmitOrder" method="post">
+    <div>
+        <label for="BillingAddress">Billing Address:</label>
+        <input type="text" id="BillingAddress" name="BillingAddress" required>
+    </div>
+
+    <h3>Cart Items</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Image</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var cartItem in Model)
+            {
+                <tr>
+                    <td>@cartItem.Product.Name</td>
+                    <td>
+                        @if (cartItem.Product.Images.Any())
+                        {
+                            <img src="@cartItem.Product.Images.First().FileName" alt="Product Image" width="50" />
+                        }
+                        else
+                        {
+                            <span>No Image</span>
+                        }
+                    </td>
+                    <td>@cartItem.Quantity</td>
+                    <td>@cartItem.Product.Price</td>
+                    <td>@(cartItem.Quantity * cartItem.Product.Price)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <button type="submit" class="btn btn-success">Submit Order</button>
+</form>
+
+@* 
+<h2>Buy</h2>
+
+@if (Model != null && Model.Count > 0)
+{
+    <h3>Cart Items</h3>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Image</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var cartItem in Model)
+            {
+                <tr>
+                    <td>@cartItem.Product.Name</td>
+                    <td>
+                        @if (cartItem.Product.Images.Any())
+                        {
+                            <img src="@cartItem.Product.Images.First().FileName" alt="Product Image" width="50" />
+                        }
+                        else
+                        {
+                            <span>No Image</span>
+                        }
+                    </td>
+                    <td>@cartItem.Quantity</td>
+                    <td>@cartItem.Product.Price</td>
+                    <td>@(cartItem.Quantity * cartItem.Product.Price)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Your cart is empty.</p>
+}
+
+<a asp-controller="Order" asp-area="Customer" asp-action="Buy" class="btn btn-primary">Buy</a> *@

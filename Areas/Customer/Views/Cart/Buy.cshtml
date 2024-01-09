@@ -1,0 +1,102 @@
+﻿@model Dashboard.Data.ModelViews.BuyViewModel
+
+@{
+    Layout = "_CustomerLayout";
+}
+
+<h2>Order Details</h2>
+
+@if (Model != null && Model.CartItems != null && Model.CartItems.Count > 0)
+{
+    <h3>Cart Items</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Image</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var cartItem in Model.CartItems)
+            {
+                <tr>
+                    <td>@cartItem.Product.Name</td>
+                    <td>
+                        @if (cartItem.Product.Images.Any())
+                        {
+                            <img src="@cartItem.Product.Images.First().FileName" alt="Product Image" width="50" />
+                        }
+                        else
+                        {
+                            <span>No Image</span>
+                        }
+                    </td>
+                    <td>@cartItem.Quantity</td>
+                    <td>@cartItem.Product.Price</td>
+                    <td>@(cartItem.Quantity * cartItem.Product.Price)</td>
+                    <td>@cartItem.Total</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <h3>Enter Billing Information</h3>
+    <form asp-controller="Cart" asp-action="Buy" method="post" onsubmit="return validateForm();">
+        <div class="form-group">
+            <label for="BillingAddress">Billing Address:</label>
+            <input type="text" asp-for="BillingAddress" class="form-control" id="BillingAddress" name="BillingAddress" >
+            <span asp-validation-for="BillingAddress" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label for="PaymentMethod">Payment Method:</label>
+            <select asp-for="PaymentMethod" class="form-control" id="PaymentMethod" name="PaymentMethod">
+                <option value="">Select Payment Method</option>
+                <option value="Paypal">Paypal</option>
+                <option value="CreditCard">Credit Card</option>
+                <option value="OnDelivery">On Delivery</option>
+            </select>
+            <span asp-validation-for="PaymentMethod" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Place Order</button>
+       
+    </form>
+}
+else
+{
+    <p>Your cart is empty.</p>
+}
+
+<!-- Include SweetAlert2 CSS and JS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+    // Function to validate the form before submission
+    function validateForm() {
+        var billingAddress = document.getElementById("BillingAddress").value;
+        var paymentMethod = document.getElementById("PaymentMethod").value;
+
+        if (billingAddress.trim() === "" ) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Form Validation Error',
+                text: 'Billing Address is required fields.',
+            });
+            return false; // Prevent form submission
+        }
+        if (paymentMethod.trim() === "") {
+            Swal.fire({
+                icon: 'error',
+                title: 'Form Validation Error',
+                text: ' Payment Method is required fields.',
+            });
+            return false;
+        }
+
+        // If both fields are filled, allow form submission
+        return true;
+    }
+</script>

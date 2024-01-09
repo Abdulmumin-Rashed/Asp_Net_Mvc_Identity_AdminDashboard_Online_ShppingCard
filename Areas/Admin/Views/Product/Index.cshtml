@@ -1,0 +1,183 @@
+﻿@using Dashboard.Data;
+@model IEnumerable<Dashboard.Models.Product>
+
+
+@inject ApplicationDbContext _c;
+@{
+    ViewData["Title"] = "Create";
+    Layout = "_AdminDashboard";
+    List<Image> image = _c.Images.ToList();
+}
+
+
+
+<style>
+
+
+    .image-container {
+        display: flex; /* Use flexbox to make images appear in a row */
+        align-items: center; /* Align images vertically within the container */
+    }
+
+    .circle-image {
+        margin-right: 6px; /* Optional: Add some spacing between images */
+    }
+
+    .circle-image-img {
+        width: 50px; /* Set an appropriate width for your images */
+        height: 50px; /* Set an appropriate height for your images */
+        border-radius: 50%; /* To make the images circular */
+    }
+
+</style>
+
+
+
+
+<div class="page-content">
+
+    <nav class="page-breadcrumb">
+        <ol class="breadcrumb">
+            <a asp-action="Create" class="btn btn-inverse-info">Add Product</a>
+
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Permissions All</h6>
+                    <div class="table-responsive">
+                        <table id="dataTableExample" class="table">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Name</th>
+
+                                   
+                                    <th>Price</th>
+                                    <th>Category</th>
+                                    <th>Images</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.Id</td>
+                                        <td>@item.Name</td>
+
+                                       
+                                        <td>@item.Price $</td>
+                                        <td>@item.Category.Name</td>
+                                        <td>
+                                            <div class="image-container">
+                                                @foreach (var i in image.Where(img => img.ProductId == item.Id))
+                                                {
+                                                    <div class="circle-image">
+                                                        <img src="@i.FileName" alt="Image" class="circle-image-img" />
+                                                    </div>
+                                                }
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            <div class="d-flex">
+                                                <a asp-action="Edit" title="Edit" asp-route-id="@item.Id" style="margin-right: 8px;">
+                                                    | <i class="bi bi-pencil" style="font-size: 16px;"></i>
+                                                </a>
+
+                                                <form asp-action="Delete" title="Delete" asp-route-id="@item.Id" method="post" class="delete-form" style="margin-right: 8px;">
+                                                    <button type="submit" class="btn btn-danger delete-button" style="padding: 2px 4px; font-size: 10px;">
+                                                        <i class="bi bi-trash" style="font-size: 12px;"></i>
+                                                    </button>
+                                                </form>
+
+                                                <a asp-action="Details" asp-route-id="@item.Id" title="Details" style="margin-right: 8px;">
+                                                    <i class="bi bi-info-circle" style="font-size: 16px;"></i>
+                                                </a>
+                                           </div>
+
+
+
+                                         
+                                        </td>
+                                    </tr>
+                                }
+
+
+                                <!-- More table rows can be added here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+<script>
+    // Attach event listener to delete buttons
+    document.querySelectorAll('.delete-button').forEach(button => {
+        button.addEventListener('click', (event) => {
+            event.preventDefault();
+
+            const form = event.target.closest('.delete-form');
+
+            // Display SweetAlert2 confirmation dialog
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Every Product that belongs to category will be deleted!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Send AJAX request to delete action
+                    fetch(form.action, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'RequestVerificationToken': form.querySelector('[name="__RequestVerificationToken"]').value
+                        }
+                    }).then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Show a success message using SweetAlert2
+                                const successSwal = Swal.fire({
+                                    title: 'Deleted!',
+                                    text: 'The product has been deleted successfully.',
+                                    icon: 'success',
+                                    showConfirmButton: false // No "OK" button
+                                });
+
+                                // Hide the success message after a delay
+                                setTimeout(() => {
+                                    successSwal.close();
+                                }, 1500); // 3 seconds
+
+                                // Refresh the page after a delay
+                                setTimeout(() => {
+                                    location.reload();
+                                }, 500); // 3.5 seconds
+                            } else {
+                                // Handle error case
+                                Swal.fire(
+                                    'Error',
+                                    'An error occurred while deleting the product.',
+                                    'error'
+                                );
+                            }
+                        });
+                }
+            });
+        });
+    });
+</script>

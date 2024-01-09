@@ -1,0 +1,123 @@
+﻿@model Dashboard.Models.Image
+@{
+    Layout = "_AdminDashboard";
+}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Image</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+</head>
+
+
+
+
+
+<div class="page-content">
+    <div class="row profile-body">
+        <div class="col-md-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Add Image</h6>
+                    <form id="uploadForm" asp-action="Create" method="post" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label asp-for="FileName" class="form-label" for="formFile">File upload</label>
+                            <input asp-for="FileName" class="form-control" type="file" name="file" id="formFile" />
+
+                            
+                           
+                        </div>
+                        <div class="mb-3">
+                            <img id="uploadedImage" class="wd-50 ht-50 rounded-circle" alt="Uploaded Image">
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="ProductId"></label>
+                            <select asp-for="ProductId" asp-items="ViewBag.ProductId" class="form-control">
+                                <option value="">Select a Product</option>
+                            </select>
+                            <span class="text-danger">@TempData["ProductId"]</span>
+                        </div>
+                       
+                        <button type="submit" class="btn btn-primary">Upload</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+
+    const fileInput = document.querySelector('[name="file"]');
+    const uploadedImage = document.getElementById('uploadedImage'); // Reference to the <img> element
+
+    fileInput.addEventListener('change', function () {
+        if (fileInput.files && fileInput.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                uploadedImage.src = e.target.result;
+            };
+            reader.readAsDataURL(fileInput.files[0]);
+        }
+    });
+    document.getElementById('uploadForm').addEventListener('submit', function (event) {
+        const fileInput = document.querySelector('[name="file"]');
+        const productSelect = document.querySelector('[name="ProductId"]');
+        const uploadedImage = document.getElementById('uploadedImage'); // Reference to the <img> element
+
+        const fileInputValue = fileInput.value; // Save the current value
+
+        if (!fileInput.value || !productSelect.value) {
+            event.preventDefault();
+
+            let errorMessage = '';
+
+            if (!fileInput.value) {
+                errorMessage = 'Please select an image to upload.';
+            }
+
+            if (!productSelect.value) {
+                errorMessage += ' Please select a product.';
+            }
+
+            Swal.fire({
+                title: 'Form Incomplete',
+                text: errorMessage,
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                // Set the original value back after showing the error
+                fileInput.value = fileInputValue;
+            });
+        } else {
+            // Update the <img> src attribute to display the selected image
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                uploadedImage.src = e.target.result;
+            };
+            reader.readAsDataURL(fileInput.files[0]);
+        }
+    });
+</script>

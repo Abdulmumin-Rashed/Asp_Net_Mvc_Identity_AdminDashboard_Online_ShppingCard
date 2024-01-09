@@ -1,0 +1,48 @@
+﻿@model List<Cart>
+<!-- Use your actual model type here -->
+
+<h2>Your Cart</h2>
+
+@if (Model != null && Model.Count > 0)
+{
+    <h3>Cart Items</h3>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Image</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var cartItem in Model)
+            {
+                <tr>
+                    <td>@cartItem.Product.Name</td>
+                    <td>
+                        @if (cartItem.Product.Images.Any())
+                        {
+                            <img src="@cartItem.Product.Images.First().FileName" alt="Product Image" width="50" />
+                        }
+                        else
+                        {
+                            <span>No Image</span>
+                        }
+                    </td>
+                    <td>@cartItem.Quantity</td>
+                    <td>@cartItem.Product.Price</td>
+                    <td>@(cartItem.Quantity * cartItem.Product.Price)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <a asp-controller="Order" asp-area="Customer" asp-action="Buy" class="btn btn-primary">Buy</a>
+}
+else
+{
+    <p>Your cart is empty.</p>
+}

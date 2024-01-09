@@ -1,0 +1,150 @@
+﻿
+@model IEnumerable<Dashboard.Models.Category>
+@{
+   
+    Layout = "_AdminDashboard";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.16.0/font/bootstrap-icons.css" rel="stylesheet">
+<style>
+    .hidden-button {
+        display: none;
+    }
+</style>
+<div class="page-content">
+
+    <nav class="page-breadcrumb">
+        <ol class="breadcrumb">
+            <a asp-action="Create"  class="btn btn-inverse-info">Add Category</a>
+
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Permissions All</h6>
+                    <div class="table-responsive">
+                        <table id="dataTableExample" class="table">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Name</th>
+                                   
+                                    <th>Status</th>
+                                   
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ( var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.Id</td>
+                                        <td>@item.Name</td>
+
+                                        <td>@item.Status</td>
+                                       
+                                        <td>
+                                            <div class="d-flex">
+                                                <a asp-action="Edit" title="Edit" asp-route-id="@item.Id" style="margin-right: 8px;">
+                                                   | <i class="bi bi-pencil" style="font-size: 16px;"></i>
+                                                </a>
+
+                                                <form asp-action="Delete" title="Delete" asp-route-id="@item.Id" method="post" class="delete-form" style="margin-right: 8px;">
+                                                    <button type="submit" class="btn btn-danger delete-button" style="padding: 2px 4px; font-size: 10px;">
+                                                        <i class="bi bi-trash" style="font-size: 12px;"></i>
+                                                    </button>
+                                                </form>
+                                                
+                                                <a asp-action="Details" asp-route-id="@item.Id" title="Details" style="margin-right: 8px;">
+                                                    <i class="bi bi-info-circle" style="font-size: 16px;"></i>
+                                                </a>
+                                            </div>
+
+
+
+
+                                            @* <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-inverse-warning ">Edit</a>
+                                            <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="delete-form">
+                                                <button type="button" class="btn btn-danger delete-button"> <i class="bi bi-trash"></i> Delete</button>
+                                            </form> *@
+                                        </td>
+                                    </tr>
+                                }
+                                
+                                
+                                <!-- More table rows can be added here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+<script>
+    // Attach event listener to delete buttons
+    document.querySelectorAll('.delete-button').forEach(button => {
+        button.addEventListener('click', (event) => {
+            event.preventDefault();
+
+            const form = event.target.closest('.delete-form');
+
+            // Display SweetAlert2 confirmation dialog
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Every Product that belongs to category will be deleted!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Send AJAX request to delete action
+                    fetch(form.action, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'RequestVerificationToken': form.querySelector('[name="__RequestVerificationToken"]').value
+                        }
+                    }).then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Show a success message using SweetAlert2
+                                const successSwal = Swal.fire({
+                                    title: 'Deleted!',
+                                    text: 'The category has been deleted successfully.',
+                                    icon: 'success',
+                                    showConfirmButton: false // No "OK" button
+                                });
+
+                                // Hide the success message after a delay
+                                setTimeout(() => {
+                                    successSwal.close();
+                                }, 1500); // 3 seconds
+
+                                // Refresh the page after a delay
+                                setTimeout(() => {
+                                    location.reload();
+                                }, 500); // 3.5 seconds
+                            } else {
+                                // Handle error case
+                                Swal.fire(
+                                    'Error',
+                                    'An error occurred while deleting the category.',
+                                    'error'
+                                );
+                            }
+                        });
+                }
+            });
+        });
+    });
+</script>

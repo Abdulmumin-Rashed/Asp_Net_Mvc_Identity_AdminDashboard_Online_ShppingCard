@@ -1,0 +1,94 @@
+﻿@model Dashboard.Models.Product
+
+@{
+    Layout = "_AdminDashboard";
+}
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+</head>
+
+<div class="page-content">
+    <div class="row profile-body">
+        <div class="col-md-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Add Category</h6>
+                    <form id="uploadForm" asp-action="Create" method="post" class="forms-sample" asp-validation-summary="All">
+                        <div class="mb-3">
+                            <label asp-for="Name" class="form-label">Product Name</label>
+                            <input asp-for="Name" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+
+                       
+
+                        <div class=" mb-3">
+                            <label asp-for="Description"></label>
+                             <textarea asp-for="Description" class="form-control"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Price" class="form-label">Price</label>
+                            <input asp-for="Price" class="form-control" />
+                            <span asp-validation-for="Price" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="CategoryId">Category</label>
+                            <select asp-for="CategoryId" asp-items="ViewBag.CategoryId" class="form-control">
+                                <option value="">Select a Category</option>
+                            </select>
+                            <span class="text-danger">@TempData["CategoryId"]</span>
+                        </div>
+                        <button type="submit" class="btn btn-primary me-2">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@* 
+
+<script>
+    document.getElementById('uploadForm').addEventListener('submit', function (event) {
+       
+        const categorySelect = document.querySelector('[name="CategoryId"]');
+       
+
+        
+        if (!categorySelect.value) {
+            event.preventDefault();
+
+            let errorMessage = '';
+
+           
+
+            if (!categorySelect.value) {
+                errorMessage += ' Please select a category.';
+            }
+
+            Swal.fire({
+                title: 'Form Incomplete',
+                text: errorMessage,
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                // Set the original value back after showing the error
+                fileInput.value = fileInputValue;
+            });
+        } else {
+            // Update the <img> src attribute to display the selected image
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                uploadedImage.src = e.target.result;
+            };
+            reader.readAsDataURL(fileInput.files[0]);
+        }
+    });
+ </script> *@

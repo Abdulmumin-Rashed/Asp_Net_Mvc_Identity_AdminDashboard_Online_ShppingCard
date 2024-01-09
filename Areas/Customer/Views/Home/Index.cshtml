@@ -1,0 +1,23 @@
+﻿@model List<Product>
+@{
+    Layout = "_CustomerLayout";
+}
+<h2>Product List</h2>
+
+<div class="row">
+    @foreach (var product in Model)
+    {
+        <div class="col-md-3 col-sm-3 col-4">
+            <div class="card">
+                <img src="@product.Images.FirstOrDefault()?.FileName" class="card-img-top" alt="Product Image">
+                <div class="card-body">
+                    <h5 class="card-title">Name: @product.Name</h5>
+                    
+                    <p class="card-text">Price: $@product.Price</p>
+                    <p class="card-text">Category: @product.Category.Name</p>
+                    <a asp-action="Details" asp-route-id="@product.Id" class="btn btn-primary">Details</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

@@ -1,0 +1,50 @@
+﻿@model Dashboard.Models.Category
+@{
+    Layout = "_AdminDashboard";
+} 
+
+<style>
+   
+
+    .centered-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+       
+        margin-left: 200px;
+    }
+</style>
+
+<div class="centered-container">
+    <div class="container mt-6">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <h2>Category Details</h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <dl class="row">
+                            <dt class="col-sm-5"> ID-></dt>
+                            <dd class="col-sm-7">@Model.Id</dd>
+                            <dt class="col-sm-5"> Name-></dt>
+                            <dd class="col-sm-7">@Model.Name</dd>
+                            <dt class="col-sm-5"> Status-></dt>
+                            @if (@Model.Status==true)
+                            {
+                                <dd class="col-sm-7"> <i class="fas fa-check"></i></dd>
+                            }
+                            else
+                            {
+                                <dd class="col-sm-7">  <i class="fas fa-times"></i></dd>
+                            }
+                           
+                           
+
+                            <dt class="col-sm-5">Created At-></dt>
+                            <dd class="col-sm-7">@Model.CreateAt.ToString("MMMM dd, yyyy")</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

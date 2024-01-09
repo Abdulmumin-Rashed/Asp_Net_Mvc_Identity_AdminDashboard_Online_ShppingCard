@@ -1,0 +1,94 @@
+﻿@model Dashboard.Models.Image
+@{
+    Layout = "_AdminDashboard";
+}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Image</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+</head>
+
+
+
+
+
+<div class="page-content">
+    <div class="row profile-body">
+        <div class="col-md-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Edit Image</h6>
+                    <form id="uploadForm" asp-action="Edit" method="post" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label asp-for="FileName" class="form-label" for="formFile">File upload</label>
+                            <input asp-for="FileName" value="FileName" class="form-control" type="file" name="file" id="formFile" />
+                            <input asp-for="FileName" class="form-control" type="hidden" value="FileName" name="file2" id="formFile" />
+                          
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="ProductId"></label>
+                            <select asp-for="ProductId" asp-items="ViewBag.ProductId" class="form-control">
+                                <option value="">Select a Product</option>
+                            </select>
+                            <span class="text-danger">@TempData["ProductId"]</span>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Upload</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    document.getElementById('uploadForm').addEventListener('submit', function (event) {
+        const fileInput = document.querySelector('[name="file2"]');
+        const productSelect = document.querySelector('[name="ProductId"]');
+
+        const fileInputValue = fileInput.value; // Save the current value
+
+        if (!fileInput.value || !productSelect.value) {
+            event.preventDefault();
+
+            let errorMessage = '';
+
+            if (!fileInput.value) {
+                errorMessage = 'Please select an image to upload.';
+            }
+
+            if (!productSelect.value) {
+                errorMessage += ' Please select a product.';
+            }
+
+            Swal.fire({
+                title: 'Form Incomplete',
+                text: errorMessage,
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                // Set the original value back after showing the error
+                fileInput.value = fileInputValue;
+            });
+        }
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
